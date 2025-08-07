@@ -19,7 +19,7 @@ jobs:
           node-version: '20'
 
       - name: Instalar dependencias
-        uses: npm install
+        run: npm install
 
       - name: Lint del codigo 
         run: npm run lint
