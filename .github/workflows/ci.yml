@@ -1,35 +1,40 @@
 name: CI/CD Workflow
 
-on: 
+on:
   push:
     branches: [main]
   pull_request:
-    brancehs: [main]
-    
+    branches: [main]
 
 jobs:
-  buil-and-test:
-    runs-on: ubunu-latest
+  build-and-test:
+    runs-on: ubuntu-latest
     steps:
       - name: Clonar repositorio
-        uses: actions/checkout@4
+        uses: actions/checkout@v4
 
-      - name: Configurar Node.js 
+      - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json')}
+          restore-keys: ${{ runner.os }}-node-
+
       - name: Instalar dependencias
         run: npm install
 
-      - name: Lint del codigo 
+      - name: Lint del codigo
         run: npm run lint
 
       - name: Ejecutar pruebas
         run: npm test
 
       - name: Simular despliegue
-        run:  |
-          echo "Despliegue simulado: La apliccion pasó Lint
+        run: |
+          echo "Despliegue simulado: La aplicación pasó Lint
           y Pruebas correctamente"
-
